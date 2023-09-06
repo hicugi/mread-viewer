@@ -1,24 +1,31 @@
 const chaptersElm = document.querySelector("#chapters");
 const imagesElm = document.querySelector("#images");
+const alertElm = document.querySelector("#alert");
 
 const chapters = {};
 
 document.querySelector("#btnSelectDir").addEventListener("click", async () => {
-  const options = { mode: "read" };
-  const dirHandle = await window.showDirectoryPicker(options);
+  alertElm.innerText = "";
 
-  chaptersElm.innerHTML = "";
+  try {
+    const options = { mode: "read" };
+    const dirHandle = await window.showDirectoryPicker(options);
 
-  for await (const [key, value] of dirHandle.entries()) {
-    if (value.kind !== "directory") continue;
+    chaptersElm.innerHTML = "";
 
-    const option = document.createElement("option");
-    option.value = key;
-    option.innerText = value.name;
+    for await (const [key, value] of dirHandle.entries()) {
+      if (value.kind !== "directory") continue;
 
-    chapters[key] = value;
+      const option = document.createElement("option");
+      option.value = key;
+      option.innerText = value.name;
 
-    chaptersElm.appendChild(option);
+      chapters[key] = value;
+
+      chaptersElm.appendChild(option);
+    }
+  } catch (err) {
+    document.querySelector("#alert").innerText = err.message;
   }
 });
 
