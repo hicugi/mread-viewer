@@ -33,6 +33,43 @@
       padding: 12px 15px;
     }
 
+    .ui-nav {
+      position: fixed;
+      top: 0;
+      border: none;
+      height: 100%;
+      width: 64px;
+      background: none;
+      text-indent: -1000vw;
+      opacity: 0.1;
+      overflow: hidden;
+    }
+    .ui-nav::before {
+      --size: 48px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      border: 2px solid;
+      border-color: #151515 #151515 transparent transparent;
+      width: var(--size);
+      height: var(--size);
+      box-sizing: border-box;
+      content: "";
+    }
+
+    .ui-nav_prev {
+      left: 0;
+    }
+    .ui-nav_prev::before {
+      transform: translate(-25%, -50%) rotate(-135deg);
+    }
+    .ui-nav_next {
+      right: 0;
+    }
+    .ui-nav_next::before {
+      transform: translate(-75%, -50%) rotate(45deg);
+    }
+
     #images {
       padding: 30px 0;
       display: flex;
@@ -58,6 +95,8 @@
 
   <div id="alert"></div>
 
+  <button class="ui-nav ui-nav_prev" id="navPrev">Previous chapter</button>
+  <button class="ui-nav ui-nav_next" id="navNext">Next chapter</button>
   <main id="images"></main>
 
   <div class="c-footerBtn">
