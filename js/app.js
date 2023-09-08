@@ -4,8 +4,11 @@ const alertElm = document.querySelector("#alert");
 
 const chapters = {};
 
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
 const selectChapter = async (chapterKey) => {
-  console.log(chapterKey);
   const dirHandle = chapters[chapterKey];
   const images = {};
 
@@ -18,16 +21,19 @@ const selectChapter = async (chapterKey) => {
   imagesElm.innerText = "";
 
   const format = (s) => Number(s.substring(0, s.indexOf(".")));
-  Object.keys(images)
-    .sort((a, b) => format(a) - format(b))
-    .forEach(async (key) => {
-      const value = images[key];
-      const img = document.createElement("img");
 
-      img.src = URL.createObjectURL(await value.getFile());
+  Promise.allSettled(
+    Object.keys(images)
+      .sort((a, b) => format(a) - format(b))
+      .map(async (key) => {
+        const value = images[key];
+        const img = document.createElement("img");
 
-      imagesElm.appendChild(img);
-    });
+        img.src = URL.createObjectURL(await value.getFile());
+
+        imagesElm.appendChild(img);
+      })
+  ).then(scrollToTop);
 };
 
 document.querySelector("#btnSelectDir").addEventListener("click", async () => {
@@ -66,7 +72,7 @@ chaptersElm.addEventListener("change", (e) => {
 });
 
 document.querySelector("#scrollToTop").addEventListener("click", () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  scrollToTop();
 });
 
 const getSelectedOptionIndex = () => chaptersElm.options.selectedIndex;
